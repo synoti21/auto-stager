@@ -1,0 +1,12 @@
+apiVersion: cache.synoti21/v1alpha1
+kind: Autostager
+metadata:
+  labels:
+    app.kubernetes.io/name: autostager
+    app.kubernetes.io/instance: autostager-sample
+    app.kubernetes.io/part-of: auto-stager
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: auto-stager
+  name: autostager-sample
+spec:
+  # TODO(user): Add fields here
