@@ -52,7 +52,7 @@ type AutostagerClient struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
 func (a *AutostagerClient) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	log.Println("Reconcile start at %s", time.Now())
+	log.Printf("Reconcile start at %s", time.Now())
 	app := &appv1alpha1.Autostager{}
 	err := a.Kubernetes.Get(ctx, req.NamespacedName, app)
 	if err != nil { // No Kubernetes Cluster is found
@@ -64,6 +64,13 @@ func (a *AutostagerClient) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	}
 
 	return ctrl.Result{}, nil
+}
+
+func NewAutostagerClient(kube client.Client, scheme *runtime.Scheme) (*AutostagerClient, error) {
+	return &AutostagerClient{
+		Kubernetes: kube,
+		Scheme:     scheme,
+	}, nil
 }
 
 func (a *AutostagerClient) UpsertDeployment(ctx context.Context, req ctrl.Request, app *appv1alpha1.Autostager) error {
