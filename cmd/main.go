@@ -35,7 +35,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
 	cachev1alpha1 "github.com/synoti21/auto-stager/api/v1alpha1"
-	"github.com/synoti21/auto-stager/internal/controller"
+	"github.com/synoti21/auto-stager/controller"
 	//+kubebuilder:scaffold:imports
 )
 

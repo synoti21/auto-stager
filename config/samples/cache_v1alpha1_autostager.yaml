@@ -1,4 +1,4 @@
-apiVersion: cache.synoti21/v1alpha1
+apiVersion: app.autostager.com/v1alpha1
 kind: Autostager
 metadata:
   labels:

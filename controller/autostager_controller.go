@@ -19,18 +19,20 @@ package controller
 import (
 	"context"
 
+	appv1alpha1 "github.com/synoti21/auto-stager/api/v1alpha1"
+	autostager "github.com/synoti21/auto-stager/internal"
+	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/log"
-
-	cachev1alpha1 "github.com/synoti21/auto-stager/api/v1alpha1"
 )
 
 // AutostagerReconciler reconciles a Autostager object
 type AutostagerReconciler struct {
 	client.Client
-	Scheme *runtime.Scheme
+	Autostager *autostager.Manager
+	Scheme     *runtime.Scheme
 }
 
 //+kubebuilder:rbac:groups=cache.synoti21,resources=autostagers,verbs=get;list;watch;create;update;patch;delete
@@ -47,16 +49,14 @@ type AutostagerReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
 func (r *AutostagerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
-
-	// TODO(user): your logic here
-
-	return ctrl.Result{}, nil
+	return r.Autostager.AutostagerClient.Reconcile(ctx, req)
 }
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *AutostagerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&cachev1alpha1.Autostager{}).
+		For(&appv1alpha1.Autostager{}).
+		Owns(&appsv1.Deployment{}).
+		Owns(&corev1.Service{}).
 		Complete(r)
 }

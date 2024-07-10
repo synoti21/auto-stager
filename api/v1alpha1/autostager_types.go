@@ -29,13 +29,26 @@ type AutostagerSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of Autostager. Edit autostager_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	HelmMode      bool   `json:"helmMode"` // true: use helm, false: use manifest from ci/cd
+	Image         string `json:"image"`
+	Tag           string `json:"tag"`
+	Namespace     string `json:"namespace"`
+	ContainerPort int32  `json:"containerPort"`
+	Replicas      *int32 `json:"replicas,omitempty"`
+	IngressHost   string `json:"ingressHost"`
+	Annotations   string `json:"annotations"`
+}
+
+type ServiceAccountSpec struct {
+	Create      *bool             `json:"create,omitempty"`
+	Annotations map[string]string `json:"annotations,omitempty"`
 }
 
 // AutostagerStatus defines the observed state of Autostager
 type AutostagerStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	Conditions   []metav1.Condition `json:"conditions,omitempty"`
+	Replicas     string             `json:"replicas,omitempty"`
+	LastSyncTime metav1.Time        `json:"lastSyncTime"`
 }
 
 //+kubebuilder:object:root=true
