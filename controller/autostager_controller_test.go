@@ -27,7 +27,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	cachev1alpha1 "github.com/synoti21/auto-stager/api/v1alpha1"
+	autostagerv1alpha1 "github.com/synoti21/auto-stager/api/v1alpha1"
 )
 
 var _ = Describe("Autostager Controller", func() {
@@ -40,13 +40,13 @@ var _ = Describe("Autostager Controller", func() {
 			Name:      resourceName,
 			Namespace: "default", // TODO(user):Modify as needed
 		}
-		autostager := &cachev1alpha1.Autostager{}
+		autostager := &autostagerv1alpha1.Autostager{}
 
 		BeforeEach(func() {
 			By("creating the custom resource for the Kind Autostager")
 			err := k8sClient.Get(ctx, typeNamespacedName, autostager)
 			if err != nil && errors.IsNotFound(err) {
-				resource := &cachev1alpha1.Autostager{
+				resource := &autostagerv1alpha1.Autostager{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
@@ -59,7 +59,7 @@ var _ = Describe("Autostager Controller", func() {
 
 		AfterEach(func() {
 			// TODO(user): Cleanup logic after each test, like removing the resource instance.
-			resource := &cachev1alpha1.Autostager{}
+			resource := &autostagerv1alpha1.Autostager{}
 			err := k8sClient.Get(ctx, typeNamespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
 

@@ -1,4 +1,4 @@
 ## Append samples of your project ##
 resources:
-- cache_v1alpha1_autostager.yaml
+- autostager_v1alpha1_autostager.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

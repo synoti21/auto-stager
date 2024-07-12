@@ -1,12 +1,12 @@
-apiVersion: app.autostager.com/v1alpha1
+apiVersion: autostager.autostager.com/v1alpha1
 kind: Autostager
 metadata:
   labels:
     app.kubernetes.io/name: autostager
     app.kubernetes.io/instance: autostager-sample
-    app.kubernetes.io/part-of: auto-stager
+    app.kubernetes.io/part-of: autostager
     app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/created-by: auto-stager
+    app.kubernetes.io/created-by: autostager
   name: autostager-sample
 spec:
   # TODO(user): Add fields here

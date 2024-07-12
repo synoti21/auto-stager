@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/name: clusterrolebinding
     app.kubernetes.io/instance: proxy-rolebinding
     app.kubernetes.io/component: kube-rbac-proxy
-    app.kubernetes.io/created-by: auto-stager
-    app.kubernetes.io/part-of: auto-stager
+    app.kubernetes.io/created-by: autostager
+    app.kubernetes.io/part-of: autostager
     app.kubernetes.io/managed-by: kustomize
   name: proxy-rolebinding
 roleRef:

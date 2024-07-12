@@ -28,8 +28,8 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 # This variable is used to construct full image tags for bundle and catalog images.
 #
 # For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
-# synoti21/auto-stager-bundle:$VERSION and synoti21/auto-stager-catalog:$VERSION.
-IMAGE_TAG_BASE ?= synoti21/auto-stager
+# autostager.com/autostager-bundle:$VERSION and autostager.com/autostager-catalog:$VERSION.
+IMAGE_TAG_BASE ?= autostager.com/autostager
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)

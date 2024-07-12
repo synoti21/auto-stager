@@ -6,13 +6,13 @@ metadata:
     app.kubernetes.io/name: clusterrole
     app.kubernetes.io/instance: autostager-editor-role
     app.kubernetes.io/component: rbac
-    app.kubernetes.io/created-by: auto-stager
-    app.kubernetes.io/part-of: auto-stager
+    app.kubernetes.io/created-by: autostager
+    app.kubernetes.io/part-of: autostager
     app.kubernetes.io/managed-by: kustomize
   name: autostager-editor-role
 rules:
 - apiGroups:
-  - cache.synoti21
+  - autostager.autostager.com
   resources:
   - autostagers
   verbs:
@@ -24,7 +24,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - cache.synoti21
+  - autostager.autostager.com
   resources:
   - autostagers/status
   verbs:
