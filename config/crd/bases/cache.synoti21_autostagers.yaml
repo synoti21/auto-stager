@@ -6,7 +6,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.13.0
   name: autostagers.cache.synoti21
 spec:
-  group: cache.synoti21
+  group: app.autostager.com
   names:
     kind: Autostager
     listKind: AutostagerList
