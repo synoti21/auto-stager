@@ -34,8 +34,6 @@ spec:
           spec:
             description: AutostagerSpec defines the desired state of Autostager
             properties:
-              annotations:
-                type: string
               containerPort:
                 format: int32
                 type: integer
@@ -52,16 +50,12 @@ spec:
               replicas:
                 format: int32
                 type: integer
-              tag:
-                type: string
             required:
-            - annotations
             - containerPort
             - helmMode
             - image
             - ingressHost
             - namespace
-            - tag
             type: object
           status:
             description: AutostagerStatus defines the observed state of Autostager

@@ -9,4 +9,9 @@ metadata:
     app.kubernetes.io/created-by: autostager
   name: autostager-sample
 spec:
-  # TODO(user): Add fields here
+  helmMode: false
+  image: "synoti21/diareat:latest"
+  namespace: "example"
+  containerPort: 80
+  replicas: 1
+  ingressHost: "home.thisiswandol.com"

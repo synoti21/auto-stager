@@ -31,12 +31,10 @@ type AutostagerSpec struct {
 	// Foo is an example field of Autostager. Edit autostager_types.go to remove/update
 	HelmMode      bool   `json:"helmMode"` // true: use helm, false: use manifest from ci/cd
 	Image         string `json:"image"`
-	Tag           string `json:"tag"`
 	Namespace     string `json:"namespace"`
 	ContainerPort int32  `json:"containerPort"`
 	Replicas      *int32 `json:"replicas,omitempty"`
 	IngressHost   string `json:"ingressHost"`
-	Annotations   string `json:"annotations"`
 }
 
 type ServiceAccountSpec struct {
