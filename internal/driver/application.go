@@ -18,6 +18,7 @@ package driver
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"log"
@@ -55,7 +56,7 @@ func (a *AutostagerClient) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	log.Printf("Reconcile start at %s", time.Now())
 	app := &appv1alpha1.Autostager{}
 	err := a.Kubernetes.Get(ctx, req.NamespacedName, app)
-	if err != nil { // No Kubernetes Cluster is found
+	if err != nil {
 		log.Println(err)
 		if errors.IsNotFound(err) {
 			return ctrl.Result{}, client.IgnoreNotFound(err)
@@ -63,6 +64,18 @@ func (a *AutostagerClient) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		return ctrl.Result{}, err
 	}
 
+	// Check for nil pointer dereference
+	if app.Spec.Replicas == nil {
+		log.Println("app.Spec.Replicas is nil")
+		return ctrl.Result{}, fmt.Errorf("app.Spec.Replicas is nil")
+	}
+
+	if err := a.UpsertDeployment(ctx, req, app); err != nil {
+		log.Println(err)
+		return ctrl.Result{}, err
+	}
+
+	log.Printf("Reconcile end at %s", time.Now())
 	return ctrl.Result{}, nil
 }
 
@@ -78,25 +91,38 @@ func (a *AutostagerClient) UpsertDeployment(ctx context.Context, req ctrl.Reques
 	err := a.Kubernetes.Get(ctx, req.NamespacedName, deployment)
 	if err != nil {
 		if errors.IsNotFound(err) {
-			log.Println("Making a Deployment")
+			log.Println("Creating a new Deployment")
 			newDeployment := a.CreateNewDeployment(ctx, req, app)
-			_ = ctrl.SetControllerReference(app, newDeployment, a.Scheme)
+			if a.Scheme == nil {
+				log.Println("a.Scheme is nil")
+				return fmt.Errorf("a.Scheme is nil")
+			}
+			if err := ctrl.SetControllerReference(app, newDeployment, a.Scheme); err != nil {
+				return err
+			}
 			return a.Kubernetes.Create(ctx, newDeployment)
 		}
+		return err
 	}
 
-	if app.Spec.Replicas != *&deployment.Spec.Replicas {
+	if deployment.Spec.Replicas == nil {
+		log.Println("deployment.Spec.Replicas is nil")
+		return fmt.Errorf("deployment.Spec.Replicas is nil")
+	}
+
+	if *app.Spec.Replicas != *deployment.Spec.Replicas {
+		log.Printf("Updating Deployment replicas from %d to %d", *deployment.Spec.Replicas, *app.Spec.Replicas)
 		deployment.Spec.Replicas = app.Spec.Replicas
 		return a.Kubernetes.Update(ctx, deployment)
 	}
-	return err
+	return nil
 }
 
 func (a *AutostagerClient) CreateNewDeployment(ctx context.Context, req ctrl.Request, app *appv1alpha1.Autostager) *v1.Deployment {
 	return &v1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      app.Name,
-			Namespace: app.Namespace,
+			Name:      req.Name,
+			Namespace: req.Namespace,
 		},
 		Spec: v1.DeploymentSpec{
 			Replicas: app.Spec.Replicas,

@@ -44,9 +44,6 @@ type ServiceAccountSpec struct {
 
 // AutostagerStatus defines the observed state of Autostager
 type AutostagerStatus struct {
-	Conditions   []metav1.Condition `json:"conditions,omitempty"`
-	Replicas     string             `json:"replicas,omitempty"`
-	LastSyncTime metav1.Time        `json:"lastSyncTime"`
 }
 
 //+kubebuilder:object:root=true

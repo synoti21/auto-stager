@@ -8,7 +8,7 @@ import (
 )
 
 type Manager struct {
-	AutostagerClient autostager.AutostagerClient
+	AutostagerClient *autostager.AutostagerClient
 }
 
 func NewManager(kube client.Client, scheme *runtime.Scheme) (*Manager, error) {
@@ -17,6 +17,6 @@ func NewManager(kube client.Client, scheme *runtime.Scheme) (*Manager, error) {
 		return nil, err
 	}
 	return &Manager{
-		AutostagerClient: *autostagerClient,
+		AutostagerClient: autostagerClient,
 	}, nil
 }
