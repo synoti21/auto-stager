@@ -2,13 +2,12 @@ package autostager
 
 import (
 	"github.com/synoti21/auto-stager/internal/driver"
-	autostager "github.com/synoti21/auto-stager/internal/driver"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type Manager struct {
-	AutostagerClient *autostager.AutostagerClient
+	AutostagerClient *driver.AutostagerClient
 }
 
 func NewManager(kube client.Client, scheme *runtime.Scheme) (*Manager, error) {

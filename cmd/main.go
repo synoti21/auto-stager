@@ -36,6 +36,7 @@ import (
 
 	autostagerv1alpha1 "github.com/synoti21/auto-stager/api/v1alpha1"
 	"github.com/synoti21/auto-stager/controller"
+	autostager "github.com/synoti21/auto-stager/internal"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -122,9 +123,17 @@ func main() {
 		os.Exit(1)
 	}
 
+	autostagerMgr, err := autostager.NewManager(mgr.GetClient(), mgr.GetScheme())
+
+	if err != nil {
+		setupLog.Error(err, "unable to create autostager operator")
+		os.Exit(1)
+	}
+
 	if err = (&controller.AutostagerReconciler{
-		Client: mgr.GetClient(),
-		Scheme: mgr.GetScheme(),
+		Client:     mgr.GetClient(),
+		Autostager: autostagerMgr,
+		Scheme:     mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Autostager")
 		os.Exit(1)
