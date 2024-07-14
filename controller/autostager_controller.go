@@ -25,6 +25,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/log"
 )
 
 // AutostagerReconciler reconciles a Autostager object
@@ -43,6 +44,8 @@ type AutostagerReconciler struct {
 //+kubebuilder:rbac:groups=core,resources=pods,verbs=get;list;watch
 
 func (r *AutostagerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	log := log.FromContext(ctx)
+	log.Info("Starting Reconcile for Autostager", "request", req)
 	return r.Autostager.AutostagerClient.Reconcile(ctx, req)
 }
 
