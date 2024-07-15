@@ -64,12 +64,6 @@ func (a *AutostagerClient) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		return ctrl.Result{}, err
 	}
 
-	// Check for nil pointer dereference
-	if app.Spec.Replicas == nil {
-		log.Println("app.Spec.Replicas is nil")
-		return ctrl.Result{}, fmt.Errorf("app.Spec.Replicas is nil")
-	}
-
 	if err := a.UpsertDeployment(ctx, req, app); err != nil {
 		log.Println(err)
 		return ctrl.Result{}, err
@@ -110,9 +104,9 @@ func (a *AutostagerClient) UpsertDeployment(ctx context.Context, req ctrl.Reques
 		return fmt.Errorf("deployment.Spec.Replicas is nil")
 	}
 
-	if *app.Spec.Replicas != *deployment.Spec.Replicas {
-		log.Printf("Updating Deployment replicas from %d to %d", *deployment.Spec.Replicas, *app.Spec.Replicas)
-		deployment.Spec.Replicas = app.Spec.Replicas
+	if !app.Spec.Helm.UseHelm && app.Spec.Manifest.Replicas != deployment.Spec.Replicas {
+		log.Printf("Updating Deployment replicas from %d to %d", *deployment.Spec.Replicas, app.Spec.Manifest.Replicas)
+		deployment.Spec.Replicas = app.Spec.Manifest.Replicas
 		return a.Kubernetes.Update(ctx, deployment)
 	}
 	return nil
@@ -125,7 +119,7 @@ func (a *AutostagerClient) CreateNewDeployment(ctx context.Context, req ctrl.Req
 			Namespace: req.Namespace,
 		},
 		Spec: v1.DeploymentSpec{
-			Replicas: app.Spec.Replicas,
+			Replicas: app.Spec.Manifest.Replicas,
 			Selector: &metav1.LabelSelector{
 				MatchLabels: map[string]string{
 					"app": req.Name,
@@ -141,10 +135,10 @@ func (a *AutostagerClient) CreateNewDeployment(ctx context.Context, req ctrl.Req
 					Containers: []corev1.Container{
 						{
 							Name:  req.Name,
-							Image: app.Spec.Image,
+							Image: *app.Spec.Manifest.Image,
 							Ports: []corev1.ContainerPort{
 								{
-									ContainerPort: app.Spec.ContainerPort,
+									ContainerPort: *app.Spec.Manifest.ContainerPort,
 								},
 							},
 						},

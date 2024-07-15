@@ -29,12 +29,28 @@ type AutostagerSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of Autostager. Edit autostager_types.go to remove/update
-	HelmMode      bool   `json:"helmMode"` // true: use helm, false: use manifest from ci/cd
-	Image         string `json:"image"`
-	Namespace     string `json:"namespace"`
-	ContainerPort int32  `json:"containerPort"`
-	Replicas      *int32 `json:"replicas,omitempty"`
-	IngressHost   string `json:"ingressHost"`
+	Helm     AutoStagerHelmSpec     `json:"helm"` // true: use helm, false: use manifest from ci/cd
+	Manifest AutoStagerManifestSpec `json:"manifest"`
+}
+
+type AutoStagerHelmSpec struct {
+	UseHelm        bool    `json:"useHelm"`
+	RepositoryPath *string `json:"repositoryPath"`
+}
+
+type AutoStagerManifestSpec struct {
+	Image         *string                         `json:"image,omitempty"`
+	Replicas      *int32                          `json:"replicas,omitempty"`
+	ContainerPort *int32                          `json:"containerPort,omitempty"`
+	IngressHost   *string                         `json:"ingressHost,omitempty"`
+	ResourceSpec  *AutoStagerManifestResourceSpec `json:"resourceSpec,omitempty"`
+}
+
+type AutoStagerManifestResourceSpec struct {
+	CPULimit      *string `json:"cpuLimit,omitempty"`
+	MemoryLimit   *string `json:"memoryLimit,omitempty"`
+	CPURequest    *string `json:"cpuRequest,omitempty"`
+	MemoryRequest *string `json:"memoryRequest,omitempty"`
 }
 
 type ServiceAccountSpec struct {

@@ -34,28 +34,45 @@ spec:
           spec:
             description: AutostagerSpec defines the desired state of Autostager
             properties:
-              containerPort:
-                format: int32
-                type: integer
-              helmMode:
+              helm:
                 description: Foo is an example field of Autostager. Edit autostager_types.go
                   to remove/update
-                type: boolean
-              image:
-                type: string
-              ingressHost:
-                type: string
-              namespace:
-                type: string
-              replicas:
-                format: int32
-                type: integer
+                properties:
+                  repositoryPath:
+                    type: string
+                  useHelm:
+                    type: boolean
+                required:
+                - repositoryPath
+                - useHelm
+                type: object
+              manifest:
+                properties:
+                  containerPort:
+                    format: int32
+                    type: integer
+                  image:
+                    type: string
+                  ingressHost:
+                    type: string
+                  replicas:
+                    format: int32
+                    type: integer
+                  resourceSpec:
+                    properties:
+                      cpuLimit:
+                        type: string
+                      cpuRequest:
+                        type: string
+                      memoryLimit:
+                        type: string
+                      memoryRequest:
+                        type: string
+                    type: object
+                type: object
             required:
-            - containerPort
-            - helmMode
-            - image
-            - ingressHost
-            - namespace
+            - helm
+            - manifest
             type: object
           status:
             description: AutostagerStatus defines the observed state of Autostager
